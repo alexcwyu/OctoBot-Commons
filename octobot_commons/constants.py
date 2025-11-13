@@ -230,6 +230,9 @@ TINYDB_EXT = ".json"
 MAX_BACKTESTING_RUNS = 500000
 MAX_OPTIMIZER_RUNS = 50000
 
+# DSL interpreter
+BASE_OPERATORS_LIBRARY = "base"
+
 # Logging
 EXCEPTION_DESC = "exception_desc"
 IS_EXCEPTION_DESC = "is_exception_desc"
