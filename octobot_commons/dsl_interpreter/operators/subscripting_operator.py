@@ -1,4 +1,3 @@
-# pylint: disable=missing-class-docstring,missing-function-docstring
 #  Drakkar-Software OctoBot-Commons
 #  Copyright (c) Drakkar-Software, All rights reserved.
 #
@@ -14,25 +13,17 @@
 #
 #  You should have received a copy of the GNU Lesser General Public
 #  License along with this library.
-import math
+import typing
+import numpy as np
 
-import octobot_commons.dsl_interpreter.operators.name_operator as dsl_interpreter_name_operator
 import octobot_commons.dsl_interpreter.operator as dsl_interpreter_operator
 
 
-class PiOperator(dsl_interpreter_name_operator.NameOperator):
-    @staticmethod
-    def get_name() -> str:
-        return "pi"
-
-    def compute(self) -> dsl_interpreter_operator.ComputedOperatorParameterType:
-        return math.pi
-
-
-class NaNOperator(dsl_interpreter_name_operator.NameOperator):
-    @staticmethod
-    def get_name() -> str:
-        return "nan"
-
-    def compute(self) -> dsl_interpreter_operator.ComputedOperatorParameterType:
-        return float("nan")
+class SubscriptingOperator(
+    dsl_interpreter_operator.Operator
+):  # pylint: disable=abstract-method
+    """
+    Base class for subscripting operators (array/list subscripting).
+    Subscripting operators have 3 parameters: the array/list, the index or slice and the context.
+    # https://docs.python.org/3/library/ast.html#subscripting
+    """

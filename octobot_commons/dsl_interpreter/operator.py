@@ -14,11 +14,12 @@
 #  You should have received a copy of the GNU Lesser General Public
 #  License along with this library.
 import typing
+import numpy as np
 
 import octobot_commons.constants
 
-OperatorParameterType = typing.Union[str, int, float, bool, None, "Operator"]
-ComputedOperatorParameterType = typing.Union[str, int, float, bool, None]
+OperatorParameterType = typing.Union[str, int, float, bool, None, list, np.ndarray, "Operator"]
+ComputedOperatorParameterType = typing.Union[str, int, float, bool, None, list, np.ndarray]
 
 
 class Operator:

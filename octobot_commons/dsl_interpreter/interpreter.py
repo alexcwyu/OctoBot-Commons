@@ -37,11 +37,23 @@ class Interpreter:
         # Save operators as a dictionary mapping operator name to operator class
         self.operators_by_name: typing.Dict[
             str, typing.Type[dsl_interpreter_operator.Operator]
-        ] = {operator_class.get_name(): operator_class for operator_class in operators}
+        ] = {}
+        self.extend(operators)
         self._operator_tree_or_constant: typing.Union[
             dsl_interpreter_operator.Operator,
             dsl_interpreter_operator.ComputedOperatorParameterType,
         ] = None
+
+    def extend(self, operators: typing.List[typing.Type[dsl_interpreter_operator.Operator]]):
+        """
+        Extend the interpreter with a list of operator classes.
+        """
+        self.operators_by_name.update(
+            {
+                operator_class.get_name(): operator_class 
+                for operator_class in operators
+            }
+        )
 
     async def interprete(
         self, expression: str
@@ -88,7 +100,7 @@ class Interpreter:
         return self._operator_tree_or_constant
 
     def _visit_node(
-        self, node: ast.AST
+        self, node: typing.Optional[ast.AST]
     ) -> typing.Union[
         dsl_interpreter_operator.Operator,
         dsl_interpreter_operator.ComputedOperatorParameterType,
@@ -179,6 +191,37 @@ class Interpreter:
                 orelse = self._visit_node(node.orelse)
                 return operator_class(test, body, orelse)
             raise ValueError(f"Unknown IfExp operator: {op_name}")
+
+        if isinstance(node, ast.Subscript):
+            # Subscript: array[index]
+            op_name = type(node).__name__
+            if op_name in self.operators_by_name:
+                operator_class = self.operators_by_name[op_name]
+                array_or_list = self._visit_node(node.value)
+                index_or_slice = self._visit_node(node.slice)
+                context = node.ctx
+                return operator_class(array_or_list, index_or_slice, context)
+
+        if isinstance(node, ast.List):
+            # List: [1, 2, 3]
+            op_name = ast.List.__name__
+            if op_name in self.operators_by_name:
+                operator_class = self.operators_by_name[op_name]
+                operands = [self._visit_node(operand) for operand in node.elts]
+                return operator_class(*operands)
+
+        if isinstance(node, ast.Slice):
+            # Slice: slice(1, 2, 3)
+            op_name = ast.Slice.__name__
+            if op_name in self.operators_by_name:
+                operator_class = self.operators_by_name[op_name]
+                lower = self._visit_node(node.lower)
+                upper = self._visit_node(node.upper)
+                step = self._visit_node(node.step)
+                return operator_class(lower, upper, step)
+
+        if node is None:
+            return None
 
         raise ValueError(f"Unsupported AST node type: {type(node).__name__}")
 

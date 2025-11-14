@@ -17,6 +17,7 @@ import functools
 
 import octobot_commons.dsl_interpreter
 import octobot_commons.tentacles_management
+import octobot_commons.constants
 
 
 @functools.lru_cache(maxsize=16)
@@ -37,7 +38,11 @@ def get_all_operators(
         for operator in octobot_commons.tentacles_management.get_all_classes_from_parent(
             octobot_commons.dsl_interpreter.Operator
         )
-        if libraries_filter is None
+        if (
+            libraries_filter is None or 
+            # contextual operators should not be included by default
+            operator.get_library() != octobot_commons.constants.CONTEXTUAL_OPERATORS_LIBRARY
+        )
         or operator.get_library()
         in libraries_filter  # pylint: disable=unsupported-membership-test
     )

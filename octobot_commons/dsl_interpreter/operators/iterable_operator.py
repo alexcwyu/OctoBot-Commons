@@ -1,4 +1,3 @@
-# pylint: disable=missing-class-docstring,missing-function-docstring
 #  Drakkar-Software OctoBot-Commons
 #  Copyright (c) Drakkar-Software, All rights reserved.
 #
@@ -14,27 +13,13 @@
 #
 #  You should have received a copy of the GNU Lesser General Public
 #  License along with this library.
-import ast
-
-import octobot_commons.dsl_interpreter.operators.n_ary_operator as dsl_interpreter_n_ary_operator
 import octobot_commons.dsl_interpreter.operator as dsl_interpreter_operator
 
 
-class AndOperator(dsl_interpreter_n_ary_operator.NaryOperator):
-    @staticmethod
-    def get_name() -> str:
-        return ast.And.__name__
-
-    def compute(self) -> dsl_interpreter_operator.ComputedOperatorParameterType:
-        operands = self.get_computed_parameters()
-        return all(operands)
-
-
-class OrOperator(dsl_interpreter_n_ary_operator.NaryOperator):
-    @staticmethod
-    def get_name() -> str:
-        return ast.Or.__name__
-
-    def compute(self) -> dsl_interpreter_operator.ComputedOperatorParameterType:
-        operands = self.get_computed_parameters()
-        return any(operands)
+class IterableOperator(
+    dsl_interpreter_operator.Operator
+):  # pylint: disable=abstract-method
+    """
+    Base class for iterable operators.
+    Iterable operators have one or more operands.
+    """

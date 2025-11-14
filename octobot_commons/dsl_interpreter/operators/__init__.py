@@ -15,52 +15,6 @@
 #  You should have received a copy of the GNU Lesser General Public
 #  License along with this library.
 
-import octobot_commons.dsl_interpreter.operators.base_binary_operators as dsl_interpreter_base_binary_operators
-from octobot_commons.dsl_interpreter.operators.base_binary_operators import (
-    AddOperator,
-    SubOperator,
-    MultOperator,
-    DivOperator,
-    FloorDivOperator,
-    ModOperator,
-    PowOperator,
-)
-import octobot_commons.dsl_interpreter.operators.base_compare_operators as dsl_interpreter_base_compare_operators
-from octobot_commons.dsl_interpreter.operators.base_compare_operators import (
-    EqOperator,
-    NotEqOperator,
-    LtOperator,
-    LtEOperator,
-    GtOperator,
-    GtEOperator,
-    IsOperator,
-    IsNotOperator,
-    InOperator,
-    NotInOperator,
-)
-import octobot_commons.dsl_interpreter.operators.base_unary_operators as dsl_interpreter_base_unary_operators
-from octobot_commons.dsl_interpreter.operators.base_unary_operators import (
-    UAddOperator,
-    USubOperator,
-    NotOperator,
-    InvertOperator,
-)
-import octobot_commons.dsl_interpreter.operators.base_nary_operators as dsl_interpreter_base_nary_operators
-from octobot_commons.dsl_interpreter.operators.base_nary_operators import (
-    AndOperator,
-    OrOperator,
-)
-import octobot_commons.dsl_interpreter.operators.base_call_operators as dsl_interpreter_base_call_operators
-from octobot_commons.dsl_interpreter.operators.base_call_operators import (
-    MinOperator,
-    MaxOperator,
-    MeanOperator,
-    SqrtOperator,
-    AbsOperator,
-    RoundOperator,
-    FloorOperator,
-    CeilOperator,
-)
 from octobot_commons.dsl_interpreter.operators.binary_operator import (
     BinaryOperator,
 )
@@ -76,60 +30,27 @@ from octobot_commons.dsl_interpreter.operators.n_ary_operator import (
 from octobot_commons.dsl_interpreter.operators.call_operator import (
     CallOperator,
 )
-import octobot_commons.dsl_interpreter.operators.base_name_operators as dsl_interpreter_base_name_operators
-from octobot_commons.dsl_interpreter.operators.base_name_operators import (
-    PiOperator,
-)
 from octobot_commons.dsl_interpreter.operators.name_operator import (
     NameOperator,
-)
-import octobot_commons.dsl_interpreter.operators.base_expression_operators as dsl_interpreter_base_expression_operators
-from octobot_commons.dsl_interpreter.operators.base_expression_operators import (
-    IfExpOperator,
 )
 from octobot_commons.dsl_interpreter.operators.expression_operator import (
     ExpressionOperator,
 )
+from octobot_commons.dsl_interpreter.operators.subscripting_operator import (
+    SubscriptingOperator,
+)
+from octobot_commons.dsl_interpreter.operators.iterable_operator import (
+    IterableOperator,
+)
 
 __all__ = [
-    "AddOperator",
-    "SubOperator",
-    "MultOperator",
-    "DivOperator",
-    "FloorDivOperator",
-    "ModOperator",
-    "PowOperator",
-    "EqOperator",
-    "NotEqOperator",
-    "LtOperator",
-    "LtEOperator",
-    "GtOperator",
-    "GtEOperator",
-    "IsOperator",
-    "IsNotOperator",
-    "InOperator",
-    "NotInOperator",
     "BinaryOperator",
     "CompareOperator",
     "UnaryOperator",
-    "UAddOperator",
-    "USubOperator",
-    "NotOperator",
-    "InvertOperator",
-    "AndOperator",
-    "OrOperator",
     "NaryOperator",
     "CallOperator",
-    "MinOperator",
-    "MaxOperator",
-    "MeanOperator",
-    "SqrtOperator",
-    "AbsOperator",
-    "RoundOperator",
-    "FloorOperator",
-    "CeilOperator",
     "NameOperator",
-    "PiOperator",
     "ExpressionOperator",
-    "IfExpOperator",
+    "SubscriptingOperator",
+    "IterableOperator",
 ]

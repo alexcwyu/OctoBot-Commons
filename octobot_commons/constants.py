@@ -232,6 +232,7 @@ MAX_OPTIMIZER_RUNS = 50000
 
 # DSL interpreter
 BASE_OPERATORS_LIBRARY = "base"
+CONTEXTUAL_OPERATORS_LIBRARY = "contextual"
 
 # Logging
 EXCEPTION_DESC = "exception_desc"
