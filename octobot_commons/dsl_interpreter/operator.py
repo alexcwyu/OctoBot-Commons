@@ -17,9 +17,14 @@ import typing
 import numpy as np
 
 import octobot_commons.constants
+import octobot_commons.dsl_interpreter.interpreter_dependency as dsl_interpreter_dependency
 
-OperatorParameterType = typing.Union[str, int, float, bool, None, list, np.ndarray, "Operator"]
-ComputedOperatorParameterType = typing.Union[str, int, float, bool, None, list, np.ndarray]
+OperatorParameterType = typing.Union[
+    str, int, float, bool, None, list, np.ndarray, "Operator"
+]
+ComputedOperatorParameterType = typing.Union[
+    str, int, float, bool, None, list, np.ndarray
+]
 
 
 class Operator:
@@ -70,3 +75,15 @@ class Operator:
             parameter.compute() if isinstance(parameter, Operator) else parameter
             for parameter in self.parameters
         ]
+
+    def get_dependencies(
+        self,
+    ) -> typing.List[dsl_interpreter_dependency.InterpreterDependency]:
+        """
+        Get the dependencies of the operator.
+        """
+        dependencies = []
+        for parameter in self.parameters:
+            if isinstance(parameter, Operator):
+                dependencies.extend(parameter.get_dependencies())
+        return dependencies

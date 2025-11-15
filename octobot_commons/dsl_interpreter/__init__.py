@@ -34,7 +34,7 @@ from octobot_commons.dsl_interpreter.operators import (
     NameOperator,
     ExpressionOperator,
 )
-
+from octobot_commons.dsl_interpreter.interpreter_dependency import InterpreterDependency
 
 __all__ = [
     "get_all_operators",
@@ -48,4 +48,5 @@ __all__ = [
     "CallOperator",
     "NameOperator",
     "ExpressionOperator",
+    "InterpreterDependency",
 ]

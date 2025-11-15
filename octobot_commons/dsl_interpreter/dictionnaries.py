@@ -39,12 +39,13 @@ def get_all_operators(
             octobot_commons.dsl_interpreter.Operator
         )
         if (
-            libraries_filter is None or 
-            # contextual operators should not be included by default
-            operator.get_library() != octobot_commons.constants.CONTEXTUAL_OPERATORS_LIBRARY
+            libraries_filter is None
+            or operator.get_library()
+            in libraries_filter  # pylint: disable=unsupported-membership-test
         )
-        or operator.get_library()
-        in libraries_filter  # pylint: disable=unsupported-membership-test
+        # contextual operators should not be included by default
+        and operator.get_library()
+        != octobot_commons.constants.CONTEXTUAL_OPERATORS_LIBRARY
     )
     non_abstract_operators = []
     for operator in all_with_abstracts:

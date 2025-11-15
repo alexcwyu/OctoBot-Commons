@@ -13,143 +13,122 @@
 #
 #  You should have received a copy of the GNU Lesser General Public
 #  License along with this library.
-import math
+import mock
+import dataclasses
+import typing
 import pytest
 import octobot_commons.dsl_interpreter as dsl_interpreter
+import octobot_commons.enums as commons_enums
+import octobot_commons.constants as commons_constants
+import ast
+
+
+@dataclasses.dataclass
+class ChannelDependency(dsl_interpreter.InterpreterDependency):
+    channel_name: str
+
+
+class SumPlusXOperatorWithoutInit(dsl_interpreter.NaryOperator):
+    def __init__(self, *parameters: dsl_interpreter.OperatorParameterType, **kwargs: typing.Any):
+        super().__init__(*parameters, **kwargs)
+        self.x_value = 42
+    
+    @staticmethod
+    def get_name() -> str:
+        return "plus_42"
+
+    def compute(self) -> dsl_interpreter.ComputedOperatorParameterType:
+        computed_parameters = self.get_computed_parameters()
+        return sum(computed_parameters) + self.x_value
+
+
+class TimeFrameToSecondsOperator(dsl_interpreter.CallOperator):
+    def __init__(self, operand: dsl_interpreter.OperatorParameterType, **kwargs: typing.Any):
+        super().__init__(operand, **kwargs)
+
+    @staticmethod
+    def get_name() -> str:
+        return "time_frame_to_seconds"
+
+    def get_dependencies(self) -> typing.List[dsl_interpreter.InterpreterDependency]:
+        dependencies = super().get_dependencies()
+        dependencies.append(ChannelDependency("time_channel"))
+        return dependencies
+
+    def compute(self) -> dsl_interpreter.ComputedOperatorParameterType:
+        computed_parameters = self.get_computed_parameters()
+        return commons_enums.TimeFramesMinutes[commons_enums.TimeFrames(computed_parameters[0])] * commons_constants.MINUTE_TO_SECONDS
+
+
+class AddOperator(dsl_interpreter.BinaryOperator):
+    @staticmethod
+    def get_name() -> str:
+        return ast.Add.__name__
+
+    def compute(self) -> dsl_interpreter.ComputedOperatorParameterType:
+        left, right = self.get_computed_left_and_right_parameters()
+        return left + right
 
 
 @pytest.fixture
 def interpreter():
-    return dsl_interpreter.Interpreter(dsl_interpreter.get_all_operators())
+    interpreter = dsl_interpreter.Interpreter(
+        dsl_interpreter.get_all_operators()
+    )
+    interpreter.extend([
+        SumPlusXOperatorWithoutInit, TimeFrameToSecondsOperator, AddOperator
+    ])
+    return interpreter
+
+@pytest.mark.asyncio
+async def test_interprete(interpreter):
+    assert isinstance(await interpreter.interprete("plus_42()"), int)
+    assert await interpreter.interprete("time_frame_to_seconds('1m') + plus_42()") == 60 + 42
 
 
 @pytest.mark.asyncio
-async def test_interpreter_basic_operations(interpreter):
-    # constants
-    assert await interpreter.interprete("True") is True
-    assert await interpreter.interprete("'test'") == "test"
-    assert await interpreter.interprete('"test"') == "test"
+async def test_prepare_and_compute_expression(interpreter):
+    assert interpreter._operator_tree_or_constant is None
+    interpreter.prepare("plus_42()")
+    assert isinstance(interpreter._operator_tree_or_constant, dsl_interpreter.Operator)
+    assert await interpreter.compute_expression() == 42
+    assert await interpreter.compute_expression() == 42 # return the same value as the first time
 
-    # unary operators
-    assert await interpreter.interprete("1") == 1
-    assert await interpreter.interprete("-11") == -11
-    assert await interpreter.interprete("+11") == +11
-    assert await interpreter.interprete("not True") is False
-    assert await interpreter.interprete("~ False") is True
+    assert isinstance(interpreter._operator_tree_or_constant, SumPlusXOperatorWithoutInit)
 
-    # binary operators
-    assert await interpreter.interprete("1 + 2") == 3
-    assert await interpreter.interprete("1 - 2") == -1
-    assert await interpreter.interprete("4 * 2") == 8
-    assert await interpreter.interprete("1 / 2") == 0.5
-    assert await interpreter.interprete("1 % 3") == 1
-    assert await interpreter.interprete("1 // 2") == 0
-    assert await interpreter.interprete("3 ** 2") == 9
+    async def compute_new_value():
+        interpreter._operator_tree_or_constant.x_value = 100
+    with mock.patch.object(
+        interpreter._operator_tree_or_constant, 'initialize', mock.AsyncMock(side_effect=compute_new_value)
+    ):
+        # now returns 100 because the same operator now has a new value (set during initialize())
+        assert await interpreter.compute_expression() == 100
+        assert await interpreter.compute_expression() == 100
 
-    # compare operators
-    assert await interpreter.interprete("1 < 2") is True
-    assert await interpreter.interprete("1 <= 2") is True
-    assert await interpreter.interprete("2 <= 2") is True
-    assert await interpreter.interprete("1 > 2") is False
-    assert await interpreter.interprete("2 >= 2") is True
-    assert await interpreter.interprete("1 == 2") is False
-    assert await interpreter.interprete("1 != 2") is True
-    assert await interpreter.interprete("1 is 2") is False
-    assert await interpreter.interprete("1 is not 2") is True
-    assert await interpreter.interprete("'1' in '123'") is True
-    assert await interpreter.interprete("'4' in '123'") is False
-
-    # variables
-    assert await interpreter.interprete("pi") == math.pi
-    assert await interpreter.interprete("pi + 1") == math.pi + 1
-    assert math.isnan(await interpreter.interprete("nan"))
-    assert math.isnan(await interpreter.interprete("nan + 1"))
-
-    # expressions
-    assert await interpreter.interprete("1 if True else 2") == 1
-    assert await interpreter.interprete("1 if False else 2") == 2
-    assert await interpreter.interprete("1 if 1 < 2 else 2") == 1
-    assert await interpreter.interprete("1 if 1 > 2 else 2") == 2
-    assert await interpreter.interprete("1 if 1 == 1 else 2") == 1
-    assert await interpreter.interprete("1 if 1 != 2 else 2") == 1
-    assert await interpreter.interprete("1 if 1 is 1 else 2") == 1
-    assert await interpreter.interprete("1 if 1 is not 2 else 2") == 1
+    # 100 value has been saved
+    assert await interpreter.compute_expression() == 100
 
 
 @pytest.mark.asyncio
-async def test_interpreter_mixed_basic_operations(interpreter):
-    assert await interpreter.interprete("1 + 2 * 3") == 7
-    assert await interpreter.interprete("(1 + 2) * 3") == 9
-    assert await interpreter.interprete("(1 + 2) * 3 + 5 / 2 + 10") == 21.5
-    assert await interpreter.interprete("(1 + 2) * 3 if 1 < 2 else 10 + pi") == 9
-    assert await interpreter.interprete("(1 + 2) * 3 if 1 > 2 else 10 + pi") == 10 + math.pi
-    assert await interpreter.interprete("1 < 2 and 2 < 3") is True
-    assert await interpreter.interprete("1 < 2 and 2 < 3 and True and 1") is True
-    assert await interpreter.interprete("1 < 2 and 2 > 3") is False
-    assert await interpreter.interprete("1 < 2 or 2 > 3") is True
-    assert await interpreter.interprete("1 < 2 or 2 > 3 or True or False or 0") is True
-    assert await interpreter.interprete("1 > 2 or 2 > 3") is False
-    assert await interpreter.interprete("not (1 < 2 and 2 < 3)") is False
-    assert await interpreter.interprete("not (1 < 2 and 2 > 3)") is True
-    assert await interpreter.interprete("not (1 > 2 or 2 > 3)") is True
-    assert await interpreter.interprete("not (1 > 2 or 2 < 3)") is False
+async def test_get_dependencies(interpreter):
+    interpreter.prepare("plus_42()")
+    assert interpreter.get_dependencies() == []
 
+    interpreter.prepare("time_frame_to_seconds('1m') + plus_42()")
+    assert interpreter.get_dependencies() == [
+        ChannelDependency("time_channel")
+    ]
 
-@pytest.mark.asyncio
-async def test_interpreter_call_operations(interpreter):
-    assert await interpreter.interprete("max(1, 2, 3)") == 3
-    assert await interpreter.interprete("min(1, 2, 3)") == 1
-    assert await interpreter.interprete("abs(-1)") == 1
-    assert await interpreter.interprete("abs(1)") == 1
-    assert await interpreter.interprete("sqrt(4)") == 2
-    assert await interpreter.interprete("mean(1, 2, 3)") == 2
-    assert await interpreter.interprete("mean(50, 110.2)") == 80.1
-    assert await interpreter.interprete("mean(3)") == 3
-    assert await interpreter.interprete("round(1.23456789, 2)") == 1.23
-    assert await interpreter.interprete("round(1.23456789, 2.22)") == 1.23
-    assert await interpreter.interprete("round(1.23456789)") == 1
-    assert await interpreter.interprete("floor(1.23456789)") == 1
-    assert await interpreter.interprete("ceil(1.23456789)") == 2
+    interpreter.prepare("time_frame_to_seconds('1m') + time_frame_to_seconds('1m')")
+    # don't return the same dependency twice
+    assert interpreter.get_dependencies() == [
+        ChannelDependency("time_channel")
+    ]
 
-
-@pytest.mark.asyncio
-async def test_interpreter_mixed_call_and_basic_operations(interpreter):
-    assert await interpreter.interprete("max(sqrt(9), abs(-4), 3 + 6)") == 9
-    assert await interpreter.interprete("min(sqrt(9), abs(-4), 3 + 6)") == 3
-    assert await interpreter.interprete("abs(min(sqrt(9), abs(-4), 3 + 6))") == 3
-    assert await interpreter.interprete("sqrt(max(1, 2, 3, 4))") == 2
-    assert await interpreter.interprete("sqrt(2**2)") == 2
-    assert await interpreter.interprete("sqrt(min(1, 2, 3))") == 1
-    assert await interpreter.interprete("abs(sqrt(max(1, 2, 4)))") == 2
-    assert await interpreter.interprete("abs(sqrt(min(1, 2, 4)))") == 1
-    assert await interpreter.interprete("mean(4, 5) + 1 + mean(1, 1 + 1, 3)") == 7.5
-
-
-@pytest.mark.asyncio
-async def test_interpreter_insupported_operations(interpreter):
-    with pytest.raises(ValueError):
-        await interpreter.interprete("1 & 2")
-    with pytest.raises(ValueError):
-        await interpreter.interprete("1 | 2")
-    with pytest.raises(ValueError):
-        await interpreter.interprete("3 ^ 2")
-    with pytest.raises(ValueError):
-        await interpreter.interprete("1 << 2")
-    with pytest.raises(ValueError):
-        await interpreter.interprete("1 >> 2")
-    with pytest.raises(ValueError):
-        await interpreter.interprete("1 in [1, 2, 3]")
-    with pytest.raises(ValueError):
-        await interpreter.interprete("4 in [1, 2, 3]")
-    with pytest.raises(ValueError):
-        await interpreter.interprete("1 not in [1, 2, 3]")
-    with pytest.raises(ValueError):
-        await interpreter.interprete("4 not in [1, 2, 3]")
-    with pytest.raises(ValueError):
-        await interpreter.interprete("my_variable")
-    with pytest.raises(ValueError):
-        await interpreter.interprete("unknown_operator(1)")
-    with pytest.raises(ValueError):
-        await interpreter.interprete("mean(1, 'a')")
-    with pytest.raises(ValueError):
-        await interpreter.interprete("mean()")
+    # more than one dependency
+    with mock.patch.object(SumPlusXOperatorWithoutInit, 'get_dependencies', mock.Mock(return_value=[ChannelDependency("plop_channel")])):
+        interpreter.prepare("time_frame_to_seconds('1m') + (2 + plus_42())")
+        assert interpreter.get_dependencies() == [
+            ChannelDependency("time_channel"),
+            ChannelDependency("plop_channel")
+        ]

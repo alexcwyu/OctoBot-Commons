@@ -17,6 +17,7 @@
 import ast
 import typing
 import octobot_commons.dsl_interpreter.operator as dsl_interpreter_operator
+import octobot_commons.dsl_interpreter.interpreter_dependency as dsl_interpreter_dependency
 
 
 class Interpreter:
@@ -44,15 +45,14 @@ class Interpreter:
             dsl_interpreter_operator.ComputedOperatorParameterType,
         ] = None
 
-    def extend(self, operators: typing.List[typing.Type[dsl_interpreter_operator.Operator]]):
+    def extend(
+        self, operators: typing.List[typing.Type[dsl_interpreter_operator.Operator]]
+    ):
         """
         Extend the interpreter with a list of operator classes.
         """
         self.operators_by_name.update(
-            {
-                operator_class.get_name(): operator_class 
-                for operator_class in operators
-            }
+            {operator_class.get_name(): operator_class for operator_class in operators}
         )
 
     async def interprete(
@@ -67,10 +67,37 @@ class Interpreter:
         Returns:
             Operator instance or literal value representing the interpreted expression
         """
-        self.parse_expression(expression)
+        self._parse_expression(expression)
         return await self.compute_expression()
 
-    def parse_expression(self, expression: str):
+    def get_dependencies(
+        self,
+    ) -> typing.List[dsl_interpreter_dependency.InterpreterDependency]:
+        """
+        Get the dependencies of the interpreter's parsed expression.
+        """
+        if self._operator_tree_or_constant is None:
+            raise ValueError("Expression not prepared, call prepare() first")
+        if isinstance(
+            self._operator_tree_or_constant, dsl_interpreter_operator.Operator
+        ):
+            all_deps = self._operator_tree_or_constant.get_dependencies()
+            # don't use set to avoid forcing the dependency to implement __hash__
+            deduplicated_deps = []
+            for dep in all_deps:
+                if dep not in deduplicated_deps:
+                    deduplicated_deps.append(dep)
+            return deduplicated_deps
+        return []
+
+    def prepare(self, expression: str):
+        """
+        Prepare the expression by parsing it, leaving it ready to be computed one or multiple times.
+        Call await self.compute_expression() to compute the expression.
+        """
+        self._parse_expression(expression)
+
+    def _parse_expression(self, expression: str):
         """
         Parse the expression into an AST and store the result in self._operator_tree_or_constant.
         """
