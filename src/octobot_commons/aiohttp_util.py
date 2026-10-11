@@ -206,30 +206,33 @@ class RequestCounter:
         )
 
 
-class CounterClientSession(aiohttp.ClientSession):
-    """
-    Extends aiohttp.ClientSession to periodically log requests statistics
-    """
+class _CounterSessionType(type):
+    def __instancecheck__(cls, instance):
+        return isinstance(instance, aiohttp.ClientSession) and getattr(instance, "_octobot_request_counter", False)
 
-    def __init__(self, identifier: str, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.per_min: RequestCounter = RequestCounter(
-            identifier, octobot_commons.constants.MINUTE_TO_SECONDS
-        )
-        self.per_hour: RequestCounter = RequestCounter(
-            identifier, octobot_commons.constants.HOURS_TO_SECONDS
-        )
-        self.per_day: RequestCounter = RequestCounter(
-            identifier, octobot_commons.constants.DAYS_TO_SECONDS
-        )
 
-    async def _request(
-        self, method: str, str_or_url: aiohttp.typedefs.StrOrURL, *args, **kwargs
-    ) -> aiohttp.ClientResponse:
-        self._account_for(method, str_or_url, time.time())
-        if kwargs:
-            return await super()._request(method, str_or_url, *args, **kwargs)
-        return await super()._request(method, str_or_url)
+class CounterClientSession(metaclass=_CounterSessionType):
+    """Create a standard aiohttp session with periodic request statistics."""
+
+    def __new__(cls, identifier: str, *args, **kwargs):
+        counter = object.__new__(cls)
+        counter.per_min = RequestCounter(identifier, octobot_commons.constants.MINUTE_TO_SECONDS)
+        counter.per_hour = RequestCounter(identifier, octobot_commons.constants.HOURS_TO_SECONDS)
+        counter.per_day = RequestCounter(identifier, octobot_commons.constants.DAYS_TO_SECONDS)
+
+        session = aiohttp.ClientSession(*args, **kwargs)
+        session.per_min = counter.per_min
+        session.per_hour = counter.per_hour
+        session.per_day = counter.per_day
+        session._octobot_request_counter = True
+        original_request = session._request
+
+        async def counted_request(method, url, *request_args, **request_kwargs):
+            counter._account_for(method, url, time.time())
+            return await original_request(method, url, *request_args, **request_kwargs)
+
+        session._request = counted_request
+        return session
 
     def _account_for(
         self, method: str, str_or_url: aiohttp.typedefs.StrOrURL, timestamp: float

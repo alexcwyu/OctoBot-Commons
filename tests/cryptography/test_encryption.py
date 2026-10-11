@@ -311,7 +311,7 @@ def test_aes_gcm_decrypt_corrupted_data():
 
     encrypted_data = cryptography.aes_gcm_encrypt(plaintext, aes_key, iv)
     # Corrupt the data
-    corrupted_data = encrypted_data[:-1] + b"\x00"
+    corrupted_data = encrypted_data[:-1] + bytes([encrypted_data[-1] ^ 1])
 
     with pytest.raises(Exception):  # Should raise authentication error
         cryptography.aes_gcm_decrypt(corrupted_data, aes_key, iv)

@@ -20,24 +20,24 @@ import octobot_commons.dataclasses
 
 
 @dataclasses.dataclass
-class TestPersonClass(octobot_commons.dataclasses.UpdatableDataclass):
+class PersonFixture(octobot_commons.dataclasses.UpdatableDataclass):
     name: str = ""
     age: int = 0
     likes: list = dataclasses.field(default_factory=list)
 
 
 @dataclasses.dataclass
-class TestPersonGroupClass(octobot_commons.dataclasses.UpdatableDataclass):
+class PersonGroupFixture(octobot_commons.dataclasses.UpdatableDataclass):
     identifier: str = ""
-    present_people: list[TestPersonClass] = dataclasses.field(default_factory=list)
-    absent_people: list[TestPersonClass] = dataclasses.field(default_factory=list)
-    leader: TestPersonClass = dataclasses.field(default_factory=TestPersonClass)
+    present_people: list[PersonFixture] = dataclasses.field(default_factory=list)
+    absent_people: list[PersonFixture] = dataclasses.field(default_factory=list)
+    leader: PersonFixture = dataclasses.field(default_factory=PersonFixture)
 
 
 def test_simple_update():
-    person_1 = TestPersonClass("olive", 25)
-    person_2 = TestPersonClass("olive", 25, ["football", "poe"])
-    person_2_update = TestPersonClass("tom", likes=["football"])
+    person_1 = PersonFixture("olive", 25)
+    person_2 = PersonFixture("olive", 25, ["football", "poe"])
+    person_2_update = PersonFixture("tom", likes=["football"])
 
     assert person_1.likes == []
     person_1.update(person_2)
@@ -61,24 +61,24 @@ def test_simple_update():
 
 
 def test_nested_update():
-    person_1 = TestPersonClass("olive", 25)
-    person_2 = TestPersonClass("olive", 25, ["football", "poe"])
-    person_3 = TestPersonClass("mr plop", 29, ["crypto", "poe"])
-    person_2_update = TestPersonClass("tom", likes=["football"], _updated_fields=["name", "likes"])
-    group_1 = TestPersonGroupClass()    # empty group
-    group_2 = TestPersonGroupClass(
+    person_1 = PersonFixture("olive", 25)
+    person_2 = PersonFixture("olive", 25, ["football", "poe"])
+    person_3 = PersonFixture("mr plop", 29, ["crypto", "poe"])
+    person_2_update = PersonFixture("tom", likes=["football"], _updated_fields=["name", "likes"])
+    group_1 = PersonGroupFixture()    # empty group
+    group_2 = PersonGroupFixture(
         identifier="identifier_1",
         present_people=[person_1, person_3],
         absent_people=[person_2]
     )
-    group_2_update_no_absent = TestPersonGroupClass(
+    group_2_update_no_absent = PersonGroupFixture(
         absent_people=[],
         _updated_fields=["absent_people"]
     )
-    group_2_update_empty_identifier = TestPersonGroupClass(
+    group_2_update_empty_identifier = PersonGroupFixture(
         _updated_fields=["identifier"]
     )
-    group_2_update_person_1 = TestPersonGroupClass(
+    group_2_update_person_1 = PersonGroupFixture(
         present_people=[person_2_update, person_3],
         _updated_fields=["present_people"]
     )
@@ -122,7 +122,7 @@ def test_nested_update():
     assert group_2.present_people[1].age == 29
     assert group_2.present_people[1].likes == ["crypto", "poe"]
 
-    group_2_update_person_2 = TestPersonGroupClass(
+    group_2_update_person_2 = PersonGroupFixture(
         present_people=[person_2_update],
         _updated_fields=["present_people"]
     )
@@ -144,9 +144,9 @@ def test_nested_update():
 
 
 def test_get_update():
-    person_1 = TestPersonClass("olive", 25)
-    person_2 = TestPersonClass("olive", 25, ["football", "poe"])
-    person_3 = TestPersonClass("mr plop", 29, ["crypto", "poe"])
+    person_1 = PersonFixture("olive", 25)
+    person_2 = PersonFixture("olive", 25, ["football", "poe"])
+    person_3 = PersonFixture("mr plop", 29, ["crypto", "poe"])
 
     # only likes changed
     update = person_1.get_update(person_2)
@@ -171,24 +171,24 @@ def test_get_update():
 
 
 def test_nested_get_update():
-    person_1 = TestPersonClass("olive", 25)
-    person_2 = TestPersonClass("olive", 25, ["football", "poe"])
-    person_3 = TestPersonClass("mr plop", 29, ["crypto", "poe"])
-    person_3_update = TestPersonClass("mr plop the second", 10, ["crypto", "poe", "metal"])
-    group_1 = TestPersonGroupClass()    # empty group
-    group_2 = TestPersonGroupClass(
+    person_1 = PersonFixture("olive", 25)
+    person_2 = PersonFixture("olive", 25, ["football", "poe"])
+    person_3 = PersonFixture("mr plop", 29, ["crypto", "poe"])
+    person_3_update = PersonFixture("mr plop the second", 10, ["crypto", "poe", "metal"])
+    group_1 = PersonGroupFixture()    # empty group
+    group_2 = PersonGroupFixture(
         identifier="identifier_1",
         present_people=[person_1, person_3],
         absent_people=[person_2],
         leader=person_1,
     )
-    group_3 = TestPersonGroupClass(
+    group_3 = PersonGroupFixture(
         identifier="identifier_1",
         present_people=[person_1],
         absent_people=[person_2, person_3],
         leader=person_3,
     )
-    group_3_updated_person_3 = TestPersonGroupClass(
+    group_3_updated_person_3 = PersonGroupFixture(
         identifier="identifier_1",
         present_people=[person_1],
         absent_people=[person_2, person_3_update],
@@ -222,8 +222,8 @@ def test_nested_get_update():
 
     update = group_2.get_update(group_3)
     assert update.identifier == ""
-    assert update.present_people == [TestPersonClass()]             # TestPersonClass() when no change
-    assert update.absent_people == [TestPersonClass(), person_3]    # TestPersonClass() when no change
+    assert update.present_people == [PersonFixture()]             # PersonFixture() when no change
+    assert update.absent_people == [PersonFixture(), person_3]    # PersonFixture() when no change
     assert update.leader.name == person_3.name
     assert update.leader.age == person_3.age
     assert update.leader.likes == person_3.likes
@@ -234,7 +234,7 @@ def test_nested_get_update():
     assert update.identifier == ""
     assert update.present_people == []
     assert len(update.absent_people) == 2
-    assert update.absent_people[0] == TestPersonClass()
+    assert update.absent_people[0] == PersonFixture()
     assert update.absent_people[1].name == person_3_update.name
     assert update.absent_people[1].age == person_3_update.age
     assert update.absent_people[1].likes == person_3_update.likes
@@ -247,17 +247,17 @@ def test_nested_get_update():
 
 
 def test_get_update_and_update():
-    person_1 = TestPersonClass("olive", 25)
-    person_2 = TestPersonClass("olive", 25, likes=["football", "poe"])
-    person_3 = TestPersonClass("mr plop", 29, ["crypto", "poe"])
-    group_1 = TestPersonGroupClass()    # empty group
-    group_2 = TestPersonGroupClass(
+    person_1 = PersonFixture("olive", 25)
+    person_2 = PersonFixture("olive", 25, likes=["football", "poe"])
+    person_3 = PersonFixture("mr plop", 29, ["crypto", "poe"])
+    group_1 = PersonGroupFixture()    # empty group
+    group_2 = PersonGroupFixture(
         identifier="identifier_1",
         present_people=[person_1, person_3],
         absent_people=[person_2],
         leader=copy.deepcopy(person_1),
     )
-    group_3 = TestPersonGroupClass(
+    group_3 = PersonGroupFixture(
         identifier="identifier_1",
         present_people=[person_1],
         absent_people=[person_2, person_3],
@@ -281,9 +281,9 @@ def test_get_update_and_update():
     group_2_3 = copy.deepcopy(group_2)
     update = group_2.get_update(group_3)
     assert update.identifier == ""
-    assert update.present_people == [TestPersonClass()]
+    assert update.present_people == [PersonFixture()]
     assert len(update.absent_people) == 2
-    assert update.absent_people[0] == TestPersonClass()
+    assert update.absent_people[0] == PersonFixture()
     assert update.absent_people[1].name == person_3.name
     assert update.leader.name == person_3.name
     group_2_3.update(update)
@@ -294,7 +294,7 @@ def test_get_update_and_update():
 
 
 def test_to_dict_without_updated_fields():
-    person_2 = TestPersonClass("olive", 25, likes=["football", "poe"])
+    person_2 = PersonFixture("olive", 25, likes=["football", "poe"])
     # _updated_fields included (default behavior)
     assert dataclasses.asdict(person_2) == {
         "_updated_fields": [],

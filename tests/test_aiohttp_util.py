@@ -13,6 +13,7 @@
 #
 #  You should have received a copy of the GNU Lesser General Public
 #  License along with this library.
+import asyncio
 import contextlib
 import mock
 import pytest
@@ -83,6 +84,7 @@ async def test_fetch_test_url_with_and_without_certify():
             await base_session.close()
         if certify_session:
             await certify_session.close()
+        await asyncio.sleep(0.25)
 
 
 async def test_certify_aiohttp_client_session():
@@ -107,3 +109,4 @@ async def test_counter_client_session():
             assert session.per_min.paths == {"[GET] /": 1}
             assert session.per_hour.paths == {"[GET] /": 1}
             assert session.per_day.paths == {"[GET] /": 1}
+    await asyncio.sleep(0.25)

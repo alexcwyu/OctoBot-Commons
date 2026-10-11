@@ -21,19 +21,19 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
 ]
 dependencies = [
-    "numpy==1.26.3",
+    "numpy",
     "cryptography",
     "sortedcontainers",
     "requests",
-    "aiohttp>=3.9.5",
+    "aiohttp",
 ]
 
 [project.optional-dependencies]
 full = [
-    "jsonschema==4.26.0",
-    "psutil==5.9.7",
-    "certifi==2024.02.02",
-    "aiosqlite==0.17.0",
+    "jsonschema",
+    "psutil",
+    "certifi",
+    "aiosqlite",
 ]
 
 [project.urls]
@@ -41,7 +41,13 @@ Homepage = "https://github.com/Drakkar-Software/OctoBot-Commons"
 
 [dependency-groups]
 dev = [
-    "pytest>=9.0",
+    "pytest",
+    "pytest-asyncio",
+    "pytest-cov",
+    "pytest-timeout",
+    "pytest-xdist",
+    "mock",
+    "ruff",
 ]
 
 [tool.uv]

@@ -33,6 +33,8 @@ def summarize_page_content(
     """
     :return: a list of (tag, content) tuples representing a html page's useful content
     """
+    if not isinstance(html_content, str):
+        raise TypeError("html_content must be a string")
     parser = _SummarizerHTMLParser(max_element_text_size)
     parser.feed(html_content)
     return parser.summary

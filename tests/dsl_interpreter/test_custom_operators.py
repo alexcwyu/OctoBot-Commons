@@ -132,21 +132,21 @@ async def test_interpreter_basic_operations(interpreter):
 
 @pytest.mark.asyncio
 async def test_interpreter_invalid_parameters(interpreter):
-    with pytest.raises(commons_errors.InvalidParametersError, match="plus_x requires at least 1 parameter\(s\): 1: data"):
+    with pytest.raises(commons_errors.InvalidParametersError, match=r"plus_x requires at least 1 parameter\(s\): 1: data"):
         interpreter.prepare("plus_x()")
-    with pytest.raises(commons_errors.InvalidParametersError, match="plus_x requires at least 1 parameter\(s\): 1: data"):
+    with pytest.raises(commons_errors.InvalidParametersError, match=r"plus_x requires at least 1 parameter\(s\): 1: data"):
         await interpreter.interprete("plus_x()")
-    with pytest.raises(commons_errors.InvalidParametersError, match="add2 requires at least 2 parameter\(s\): 1: left"):
+    with pytest.raises(commons_errors.InvalidParametersError, match=r"add2 requires at least 2 parameter\(s\): 1: left"):
         interpreter.prepare("add2()")
-    with pytest.raises(commons_errors.InvalidParametersError, match="add2 requires at least 2 parameter\(s\): 1: left"):
+    with pytest.raises(commons_errors.InvalidParametersError, match=r"add2 requires at least 2 parameter\(s\): 1: left"):
         await interpreter.interprete("add2()")
     with pytest.raises(commons_errors.InvalidParametersError, match="add2 supports up to 2 parameters:"):
         interpreter.prepare("add2(1, 2, 3)")
     with pytest.raises(commons_errors.InvalidParametersError, match="add2 supports up to 2 parameters:"):
         await interpreter.interprete("add2(1, 2, 3)")
-    with pytest.raises(commons_errors.InvalidParametersError, match="time_frame_to_seconds requires at least 1 parameter\(s\)"):
+    with pytest.raises(commons_errors.InvalidParametersError, match=r"time_frame_to_seconds requires at least 1 parameter\(s\)"):
         interpreter.prepare("time_frame_to_seconds()")
-    with pytest.raises(commons_errors.InvalidParametersError, match="time_frame_to_seconds requires at least 1 parameter\(s\)"):
+    with pytest.raises(commons_errors.InvalidParametersError, match=r"time_frame_to_seconds requires at least 1 parameter\(s\)"):
         await interpreter.interprete("time_frame_to_seconds()")
     with pytest.raises(commons_errors.InvalidParametersError, match="time_frame_to_seconds supports up to 1 parameters"):
         interpreter.prepare("time_frame_to_seconds(1, 2, 3)")
