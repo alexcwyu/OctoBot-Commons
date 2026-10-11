@@ -1,6 +1,178 @@
 {
-  "repo": "OctoBot-Commons",
-  "checks": [
+  "repository": "OctoBot-Commons",
+  "source_commit_before_documentation_commit": "002dc54ea768caa7fc71b2719242c0f8076661e9",
+  "recorded_on": "2026-10-12",
+  "records": [
+    {
+      "command": [
+        "uv",
+        "build",
+        "--python",
+        "3.15"
+      ],
+      "exit_code": 0,
+      "seconds": 1.0,
+      "check": "build",
+      "original_log": "OctoBot-Commons-build.log",
+      "log_sha256": "97647d994a8f1d2a2b3e3a37d1b7b7e9ceac8f4902730e191ad97ee849533e8c",
+      "outcomes": [
+        "Successfully built dist/octobot_commons-1.10.6.tar.gz",
+        "Successfully built dist/octobot_commons-1.10.6-py3-none-any.whl"
+      ]
+    },
+    {
+      "command": [
+        "<workspace>/OctoBot-Commons/.venv/bin/python",
+        "-m",
+        "compileall",
+        "-q",
+        "src"
+      ],
+      "exit_code": 0,
+      "seconds": 0.18,
+      "check": "compile",
+      "original_log": "OctoBot-Commons-compile.log",
+      "log_sha256": "4c324234d390f7b10b022bdd1efb637963394fdea9bc137235da23098c8a224a",
+      "outcomes": []
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "tests"
+      ],
+      "exit_code": 0,
+      "seconds": 14.27,
+      "check": "counter-final-tests",
+      "original_log": "OctoBot-Commons-counter-final-tests.log",
+      "log_sha256": "190bfe97d4089d08040b8ca6fcf39ccfd7f489a4f0b4f93c5d3d5d6d0cc89a6f",
+      "outcomes": [
+        "322 passed in 13.66s"
+      ]
+    },
+    {
+      "command": [
+        "uv",
+        "build",
+        "--python",
+        "3.15.0"
+      ],
+      "exit_code": 0,
+      "seconds": 1.52,
+      "check": "final-build",
+      "original_log": "OctoBot-Commons-final-build.log",
+      "log_sha256": "0656f57a2990de790ca109475d5c32de1e70916700dbf2342d101241de2de9e5",
+      "outcomes": [
+        "Successfully built dist/octobot_commons-1.10.6.tar.gz",
+        "Successfully built dist/octobot_commons-1.10.6-py3-none-any.whl"
+      ]
+    },
+    {
+      "command": [
+        "uv",
+        "build",
+        "--python",
+        "3.15.0"
+      ],
+      "exit_code": 0,
+      "seconds": 1.04,
+      "check": "final-build-2",
+      "original_log": "OctoBot-Commons-final-build-2.log",
+      "log_sha256": "0656f57a2990de790ca109475d5c32de1e70916700dbf2342d101241de2de9e5",
+      "outcomes": [
+        "Successfully built dist/octobot_commons-1.10.6.tar.gz",
+        "Successfully built dist/octobot_commons-1.10.6-py3-none-any.whl"
+      ]
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "compileall",
+        "-q",
+        "src"
+      ],
+      "exit_code": 0,
+      "seconds": 0.14,
+      "check": "final-compile",
+      "original_log": "OctoBot-Commons-final-compile.log",
+      "log_sha256": "4dabb76013caec51c3f56da271eb0a58b695f2bfcf5327d2708624abfe11fb50",
+      "outcomes": []
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "compileall",
+        "-q",
+        "src"
+      ],
+      "exit_code": 0,
+      "seconds": 0.07,
+      "check": "final-compile-2",
+      "original_log": "OctoBot-Commons-final-compile-2.log",
+      "log_sha256": "4dabb76013caec51c3f56da271eb0a58b695f2bfcf5327d2708624abfe11fb50",
+      "outcomes": []
+    },
+    {
+      "command": [
+        "uv",
+        "lock",
+        "--upgrade"
+      ],
+      "exit_code": 0,
+      "seconds": 0.19,
+      "check": "final-lock",
+      "original_log": "OctoBot-Commons-final-lock.log",
+      "log_sha256": "62e13973a0e243f497f86b59a45694e79d275077709e6fa85342e478573246aa",
+      "outcomes": []
+    },
+    {
+      "command": [
+        "uv",
+        "lock",
+        "--upgrade"
+      ],
+      "exit_code": 0,
+      "seconds": 0.4,
+      "check": "final-lock-2",
+      "original_log": "OctoBot-Commons-final-lock-2.log",
+      "log_sha256": "63e048a98e918ad09f474c181b2f3d6e30597565673305e3fe627db9f2b2f38a",
+      "outcomes": []
+    },
+    {
+      "command": [
+        "uv",
+        "sync",
+        "--all-extras",
+        "--frozen",
+        "--python",
+        "3.15.0"
+      ],
+      "exit_code": 0,
+      "seconds": 0.05,
+      "check": "final-sync",
+      "original_log": "OctoBot-Commons-final-sync.log",
+      "log_sha256": "d81eafd4474e968f8180773e30e968e82dca6b0686f527d1a1b7b2f3475df144",
+      "outcomes": []
+    },
+    {
+      "command": [
+        "uv",
+        "sync",
+        "--all-extras",
+        "--frozen",
+        "--python",
+        "3.15.0"
+      ],
+      "exit_code": 0,
+      "seconds": 0.04,
+      "check": "final-sync-2",
+      "original_log": "OctoBot-Commons-final-sync-2.log",
+      "log_sha256": "763abf83362d2c57457222fa17084589d2f6b83b1b8d4f6d0ff5f80fce1e3c35",
+      "outcomes": []
+    },
     {
       "command": [
         "uv",
@@ -9,10 +181,12 @@
         "--python",
         "3.15"
       ],
-      "label": "lock-3.15",
       "exit_code": 0,
       "seconds": 0.28,
-      "log": "OctoBot-Commons-lock-3.15.log"
+      "check": "lock-3.15",
+      "original_log": "OctoBot-Commons-lock-3.15.log",
+      "log_sha256": "56b3eefc6ce6ff27ff0efef9dbb461b3f0ff89721b60d49b8638c232ee06e297",
+      "outcomes": []
     },
     {
       "command": [
@@ -22,47 +196,26 @@
         "--python",
         "3.15"
       ],
-      "label": "sync-3.15",
       "exit_code": 0,
       "seconds": 0.94,
-      "log": "OctoBot-Commons-sync-3.15.log"
+      "check": "sync-3.15",
+      "original_log": "OctoBot-Commons-sync-3.15.log",
+      "log_sha256": "56536a6f351e4cd72919163a102857aa501ca6f877b85c357d1c122603aee5e8",
+      "outcomes": []
     },
     {
       "command": [
-        "uv",
-        "build",
-        "--python",
-        "3.15"
-      ],
-      "label": "build",
-      "exit_code": 0,
-      "seconds": 1.0,
-      "log": "OctoBot-Commons-build.log"
-    },
-    {
-      "command": [
-        "/Users/alex/workspaces/trading/OctoBot-Commons/.venv/bin/python",
-        "-m",
-        "compileall",
-        "-q",
-        "src"
-      ],
-      "label": "compile",
-      "exit_code": 0,
-      "seconds": 0.18,
-      "log": "OctoBot-Commons-compile.log"
-    },
-    {
-      "command": [
-        "/Users/alex/workspaces/trading/OctoBot-Commons/.venv/bin/python",
+        "<workspace>/OctoBot-Commons/.venv/bin/python",
         "-m",
         "pytest",
         "tests"
       ],
-      "label": "tests",
       "exit_code": 2,
       "seconds": 3.4,
-      "log": "OctoBot-Commons-tests.log"
+      "check": "tests",
+      "original_log": "OctoBot-Commons-tests.log",
+      "log_sha256": "8876ec0fa4cff64a2e46bdf0ea144e236fc4e88e9bbd5de4d6df5d6be79c1947",
+      "outcomes": []
     },
     {
       "command": [
@@ -71,10 +224,12 @@
         "pytest",
         "tests"
       ],
-      "label": "tests-2",
       "exit_code": 2,
       "seconds": 3.2,
-      "log": "OctoBot-Commons-tests-2.log"
+      "check": "tests-2",
+      "original_log": "OctoBot-Commons-tests-2.log",
+      "log_sha256": "c21d63ddd921a2e516a6de3e252e6b2d46b976026aec9f8398511822f513c8c5",
+      "outcomes": []
     },
     {
       "command": [
@@ -83,10 +238,62 @@
         "pytest",
         "tests"
       ],
-      "label": "tests-3",
       "exit_code": 1,
       "seconds": 29.49,
-      "log": "OctoBot-Commons-tests-3.log"
+      "check": "tests-3",
+      "original_log": "OctoBot-Commons-tests-3.log",
+      "log_sha256": "7cb8cf06a0577843fb5b9137d67e1f008515f43280f02f07c4f8fc87762b573c",
+      "outcomes": [
+        "2 failed, 320 passed in 28.64s"
+      ]
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "tests"
+      ],
+      "exit_code": 1,
+      "seconds": 31.8,
+      "check": "tests-4",
+      "original_log": "OctoBot-Commons-tests-4.log",
+      "log_sha256": "84a9406b295d0827643ad8418cc64ee5ee5bef186986e7acf85af9bad201c54a",
+      "outcomes": [
+        "1 failed, 321 passed in 31.03s"
+      ]
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "tests"
+      ],
+      "exit_code": 1,
+      "seconds": 19.59,
+      "check": "tests-5",
+      "original_log": "OctoBot-Commons-tests-5.log",
+      "log_sha256": "dd770b7eec3ce4778c204a3495ba1514d1517e1b916c20fb7235af1021f87daf",
+      "outcomes": [
+        "1 failed, 321 passed in 19.09s"
+      ]
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "tests"
+      ],
+      "exit_code": 0,
+      "seconds": 14.69,
+      "check": "tests-6",
+      "original_log": "OctoBot-Commons-tests-6.log",
+      "log_sha256": "090ca3c1c939b219c3b5696872838b1996cff8027d50d253e1603bc05b3b22eb",
+      "outcomes": [
+        "322 passed in 14.22s"
+      ]
     },
     {
       "command": [
@@ -99,98 +306,70 @@
         "--log-cli-level",
         "INFO"
       ],
-      "label": "tls-diagnostic",
       "exit_code": 0,
       "seconds": 4.24,
-      "log": "OctoBot-Commons-tls-diagnostic.log"
+      "check": "tls-diagnostic",
+      "original_log": "OctoBot-Commons-tls-diagnostic.log",
+      "log_sha256": "db473f426586e57f5ccdd2e1b076f5848f3917c694670fa25e0116a13ab64e1f",
+      "outcomes": [
+        "============================== 5 passed in 3.82s ==============================="
+      ]
+    }
+  ],
+  "summary": {
+    "repo": "OctoBot-Commons",
+    "started": "2026-10-12T00:13:20+0800",
+    "python": "3.15.0",
+    "head": "3cf7f6a8d41b639c1047eb65887225c229209dbf",
+    "branch": "feature/ayu_develop",
+    "runtime_inventory": {
+      "executable": "<workspace>/OctoBot-Commons/.venv/bin/python",
+      "packages": {
+        "Pygments": "2.21.0",
+        "aiohappyeyeballs": "2.7.1",
+        "aiohttp": "3.14.5",
+        "aiosignal": "1.4.0",
+        "aiosqlite": "0.22.1",
+        "attrs": "26.1.0",
+        "certifi": "2026.7.22",
+        "cffi": "2.1.1",
+        "charset-normalizer": "3.5.2",
+        "coverage": "7.16.2",
+        "cryptography": "50.0.2",
+        "execnet": "2.1.2",
+        "frozenlist": "1.8.0",
+        "idna": "3.20",
+        "iniconfig": "2.3.1",
+        "jsonschema": "4.26.0",
+        "jsonschema-specifications": "2025.9.1",
+        "mock": "5.2.0",
+        "multidict": "7.1.0",
+        "numpy": "2.5.4",
+        "octobot-commons": "1.10.6",
+        "packaging": "26.3",
+        "pluggy": "1.6.0",
+        "propcache": "0.5.4",
+        "psutil": "7.2.2",
+        "pycparser": "3.11",
+        "pytest": "9.1.1",
+        "pytest-asyncio": "1.4.0",
+        "pytest-cov": "7.1.0",
+        "pytest-timeout": "2.4.0",
+        "pytest-xdist": "3.8.0",
+        "referencing": "0.37.0",
+        "requests": "2.34.2",
+        "rpds-py": "2026.9.1",
+        "ruff": "0.17.0",
+        "sortedcontainers": "2.4.0",
+        "urllib3": "2.8.0",
+        "yarl": "1.25.1"
+      },
+      "python": "3.15.0 (main, Oct  9 2026, 15:11:47) [Clang 22.1.3 ]"
     },
-    {
-      "command": [
-        ".venv/bin/python",
-        "-m",
-        "pytest",
-        "tests"
-      ],
-      "label": "tests-4",
-      "exit_code": 1,
-      "seconds": 31.8,
-      "log": "OctoBot-Commons-tests-4.log"
-    },
-    {
-      "command": [
-        ".venv/bin/python",
-        "-m",
-        "pytest",
-        "tests"
-      ],
-      "label": "tests-5",
-      "exit_code": 1,
-      "seconds": 19.59,
-      "log": "OctoBot-Commons-tests-5.log"
-    },
-    {
-      "command": [
-        ".venv/bin/python",
-        "-m",
-        "pytest",
-        "tests"
-      ],
-      "label": "tests-6",
-      "exit_code": 0,
-      "seconds": 14.69,
-      "log": "OctoBot-Commons-tests-6.log"
-    },
-    {
-      "command": [
-        "uv",
-        "lock",
-        "--upgrade"
-      ],
-      "label": "final-lock",
-      "exit_code": 0,
-      "seconds": 0.19,
-      "log": "OctoBot-Commons-final-lock.log"
-    },
-    {
-      "command": [
-        "uv",
-        "sync",
-        "--all-extras",
-        "--frozen",
-        "--python",
-        "3.15.0"
-      ],
-      "label": "final-sync",
-      "exit_code": 0,
-      "seconds": 0.05,
-      "log": "OctoBot-Commons-final-sync.log"
-    },
-    {
-      "command": [
-        "uv",
-        "build",
-        "--python",
-        "3.15.0"
-      ],
-      "label": "final-build",
-      "exit_code": 0,
-      "seconds": 1.52,
-      "log": "OctoBot-Commons-final-build.log"
-    },
-    {
-      "command": [
-        ".venv/bin/python",
-        "-m",
-        "compileall",
-        "-q",
-        "src"
-      ],
-      "label": "final-compile",
-      "exit_code": 0,
-      "seconds": 0.14,
-      "log": "OctoBot-Commons-final-compile.log"
-    },
-    {
+    "validation_updated": "2026-10-12T01:32:43.353468+08:00",
+    "python_decision": "Python 3.15.0 installs the complete environment.",
+    "outcome_notes": "Existing test suite passes. CounterClientSession composes a standard aiohttp session, preserving counting and instance checks without deprecated inheritance; corrupted-ciphertext fixtures now always change a bit.",
+    "selected_test": {
       "command": [
         ".venv/bin/python",
         "-m",
@@ -200,176 +379,65 @@
       "label": "counter-final-tests",
       "exit_code": 0,
       "seconds": 14.27,
-      "log": "OctoBot-Commons-counter-final-tests.log"
+      "log": "<workspace>/docs/maintenance-2026-10-12/OctoBot-Commons-counter-final-tests.log"
     },
-    {
-      "command": [
-        "uv",
-        "lock",
-        "--upgrade"
-      ],
-      "label": "final-lock-2",
-      "exit_code": 0,
-      "seconds": 0.4,
-      "log": "OctoBot-Commons-final-lock-2.log"
+    "test_summary": "322 passed in 13.66s",
+    "status": "passed",
+    "final_checks": {
+      "lock": {
+        "command": [
+          "uv",
+          "lock",
+          "--upgrade"
+        ],
+        "label": "final-lock-2",
+        "exit_code": 0,
+        "seconds": 0.4,
+        "log": "<workspace>/docs/maintenance-2026-10-12/OctoBot-Commons-final-lock-2.log"
+      },
+      "sync": {
+        "command": [
+          "uv",
+          "sync",
+          "--all-extras",
+          "--frozen",
+          "--python",
+          "3.15.0"
+        ],
+        "label": "final-sync-2",
+        "exit_code": 0,
+        "seconds": 0.04,
+        "log": "<workspace>/docs/maintenance-2026-10-12/OctoBot-Commons-final-sync-2.log"
+      },
+      "build": {
+        "command": [
+          "uv",
+          "build",
+          "--python",
+          "3.15.0"
+        ],
+        "label": "final-build-2",
+        "exit_code": 0,
+        "seconds": 1.04,
+        "log": "<workspace>/docs/maintenance-2026-10-12/OctoBot-Commons-final-build-2.log"
+      },
+      "compile": {
+        "command": [
+          ".venv/bin/python",
+          "-m",
+          "compileall",
+          "-q",
+          "src"
+        ],
+        "label": "final-compile-2",
+        "exit_code": 0,
+        "seconds": 0.07,
+        "log": "<workspace>/docs/maintenance-2026-10-12/OctoBot-Commons-final-compile-2.log"
+      }
     },
-    {
-      "command": [
-        "uv",
-        "sync",
-        "--all-extras",
-        "--frozen",
-        "--python",
-        "3.15.0"
-      ],
-      "label": "final-sync-2",
-      "exit_code": 0,
-      "seconds": 0.04,
-      "log": "OctoBot-Commons-final-sync-2.log"
-    },
-    {
-      "command": [
-        "uv",
-        "build",
-        "--python",
-        "3.15.0"
-      ],
-      "label": "final-build-2",
-      "exit_code": 0,
-      "seconds": 1.04,
-      "log": "OctoBot-Commons-final-build-2.log"
-    },
-    {
-      "command": [
-        ".venv/bin/python",
-        "-m",
-        "compileall",
-        "-q",
-        "src"
-      ],
-      "label": "final-compile-2",
-      "exit_code": 0,
-      "seconds": 0.07,
-      "log": "OctoBot-Commons-final-compile-2.log"
-    }
-  ],
-  "started": "2026-10-12T00:13:20+0800",
-  "python": "3.15.0",
-  "head": "3cf7f6a8d41b639c1047eb65887225c229209dbf",
-  "branch": "feature/ayu_develop",
-  "runtime_inventory": {
-    "executable": "/Users/alex/workspaces/trading/OctoBot-Commons/.venv/bin/python",
-    "packages": {
-      "Pygments": "2.21.0",
-      "aiohappyeyeballs": "2.7.1",
-      "aiohttp": "3.14.5",
-      "aiosignal": "1.4.0",
-      "aiosqlite": "0.22.1",
-      "attrs": "26.1.0",
-      "certifi": "2026.7.22",
-      "cffi": "2.1.1",
-      "charset-normalizer": "3.5.2",
-      "coverage": "7.16.2",
-      "cryptography": "50.0.2",
-      "execnet": "2.1.2",
-      "frozenlist": "1.8.0",
-      "idna": "3.20",
-      "iniconfig": "2.3.1",
-      "jsonschema": "4.26.0",
-      "jsonschema-specifications": "2025.9.1",
-      "mock": "5.2.0",
-      "multidict": "7.1.0",
-      "numpy": "2.5.4",
-      "octobot-commons": "1.10.6",
-      "packaging": "26.3",
-      "pluggy": "1.6.0",
-      "propcache": "0.5.4",
-      "psutil": "7.2.2",
-      "pycparser": "3.11",
-      "pytest": "9.1.1",
-      "pytest-asyncio": "1.4.0",
-      "pytest-cov": "7.1.0",
-      "pytest-timeout": "2.4.0",
-      "pytest-xdist": "3.8.0",
-      "referencing": "0.37.0",
-      "requests": "2.34.2",
-      "rpds-py": "2026.9.1",
-      "ruff": "0.17.0",
-      "sortedcontainers": "2.4.0",
-      "urllib3": "2.8.0",
-      "yarl": "1.25.1"
-    },
-    "python": "3.15.0 (main, Oct  9 2026, 15:11:47) [Clang 22.1.3 ]"
+    "default_merged": true,
+    "upstream_default": "upstream/master",
+    "maintenance_commit": "002dc54ea768caa7fc71b2719242c0f8076661e9"
   },
-  "validation_updated": "2026-10-12T01:32:43.353468+08:00",
-  "python_decision": "Python 3.15.0 installs the complete environment.",
-  "outcome_notes": "Existing test suite passes. CounterClientSession composes a standard aiohttp session, preserving counting and instance checks without deprecated inheritance; corrupted-ciphertext fixtures now always change a bit.",
-  "selected_test": {
-    "command": [
-      ".venv/bin/python",
-      "-m",
-      "pytest",
-      "tests"
-    ],
-    "label": "counter-final-tests",
-    "exit_code": 0,
-    "seconds": 14.27,
-    "log": "OctoBot-Commons-counter-final-tests.log"
-  },
-  "test_summary": "322 passed in 13.66s",
-  "status": "passed",
-  "final_checks": {
-    "lock": {
-      "command": [
-        "uv",
-        "lock",
-        "--upgrade"
-      ],
-      "label": "final-lock-2",
-      "exit_code": 0,
-      "seconds": 0.4,
-      "log": "OctoBot-Commons-final-lock-2.log"
-    },
-    "sync": {
-      "command": [
-        "uv",
-        "sync",
-        "--all-extras",
-        "--frozen",
-        "--python",
-        "3.15.0"
-      ],
-      "label": "final-sync-2",
-      "exit_code": 0,
-      "seconds": 0.04,
-      "log": "OctoBot-Commons-final-sync-2.log"
-    },
-    "build": {
-      "command": [
-        "uv",
-        "build",
-        "--python",
-        "3.15.0"
-      ],
-      "label": "final-build-2",
-      "exit_code": 0,
-      "seconds": 1.04,
-      "log": "OctoBot-Commons-final-build-2.log"
-    },
-    "compile": {
-      "command": [
-        ".venv/bin/python",
-        "-m",
-        "compileall",
-        "-q",
-        "src"
-      ],
-      "label": "final-compile-2",
-      "exit_code": 0,
-      "seconds": 0.07,
-      "log": "OctoBot-Commons-final-compile-2.log"
-    }
-  },
-  "default_merged": true,
-  "upstream_default": "upstream/master"
+  "note": "Full raw logs are retained in the workspace maintenance evidence, not distributed here. Hashes identify those original logs. A successful build or selected test subset does not imply a full test-suite pass. Commands containing <workspace> describe the original execution environment."
 }
